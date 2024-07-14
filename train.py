@@ -194,7 +194,7 @@ if __name__ == "__main__":
                                                             n_layers=hyper_params['decoder_n_layer'],
                                                             max_length=hyper_params['max_mol_len']))
     
-    model_path = "/Users/amitaflalo/Desktop/cfom/models/2023_05_24_14_46_54/epoch20"
+    model_path = "./models/2023_05_24_14_46_54/epoch20"
     model.load_state_dict(torch.load(f'{model_path}/model.pt', map_location=device))
     model.to(device)
 

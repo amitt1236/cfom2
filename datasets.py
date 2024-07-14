@@ -55,7 +55,6 @@ class FSMolDataSet(Dataset):
                                              'assay_type': INTERACTION_TYPE.get(cur_assay_type, UNKNOWN_TYPE)}
             if use_backbone:
                 if isinstance(cur_backbone, float) and np.isnan(cur_backbone):
-                    print('bam')
                     cur_backbone = 'None'
 
                 if cur_backbone == 'None':
