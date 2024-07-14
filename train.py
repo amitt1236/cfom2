@@ -36,7 +36,7 @@ def training(hyper_params, loader, epochs, device):
     optimizer = Adam(model.parameters(), lr=hyper_params['lr'], weight_decay=hyper_params['weight_decay'])
     recon_loss_fn = nn.CrossEntropyLoss()
 
-    for epoch in tqdm(epochs):
+    for epoch in tqdm(range(epochs)):
         recon_losses = []
         model.train()
         for model_inputs, model_outputs, interactions, _ in tqdm(loader):
