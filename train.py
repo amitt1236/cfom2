@@ -39,7 +39,7 @@ def training(hyper_params, loader, epochs, device):
     for epoch in tqdm(range(epochs)):
         recon_losses = []
         model.train()
-        for model_inputs, model_outputs, interactions, _ in tqdm(loader):
+        for model_inputs, model_outputs, interactions, _ in loader:
             optimizer.zero_grad()
             rand_num = np.random.rand()
             inters = interactions.to(device)
@@ -66,6 +66,7 @@ def training(hyper_params, loader, epochs, device):
             optimizer.step()
             recon_losses.append(recon_loss)
 
+    validation_step(model, test_ds, 5, device)
 
 def validation_step(model, dataset, epoch, device):
     model.eval()
@@ -200,5 +201,4 @@ if __name__ == "__main__":
 
     train_loader = DataLoader(train_ds, batch_size=hyper_params['bs'], shuffle=True)
     
-    # validation_step(model, test_ds, 5, device)
     training(hyper_params, train_loader, 20 ,device)
