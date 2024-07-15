@@ -13,6 +13,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from tqdm import tqdm
+import pickle
 
 def training(hyper_params, loader, epochs, device):
 
@@ -69,6 +70,15 @@ def training(hyper_params, loader, epochs, device):
     validation_step(model, test_ds, 5, device)
 
 def validation_step(model, dataset, epoch, device):
+    print("*"  * 20 + "model saved" + "*" * 20)
+    # save model for current validation
+    output_dir = Path(f'./models/{cur_time}/epoch{epoch + 1}')
+    output_dir.mkdir(parents=True, exist_ok=True)
+    torch.save(copy.deepcopy(model.state_dict()), f'{str(output_dir)}/model.pt')
+    with open(f'{str(output_dir)}/hyper_params.json', 'w') as f:
+        json.dump(hyper_params, f, indent=4)
+    tokenizer.save(f'{str(output_dir)}/tokenizer_object.json')
+
     model.eval()
     with torch.no_grad():
         for task in tqdm(dataset):
@@ -125,15 +135,6 @@ def validation_step(model, dataset, epoch, device):
             print(f'sim: {avg_similarity}, {std_similarity}')
             print(f'validity: {validity}')
 
-
-            # save model for current validation
-            output_dir = Path(f'./models/{cur_time}/epoch{epoch + 1}')
-            output_dir.mkdir(parents=True, exist_ok=True)
-            torch.save(copy.deepcopy(model.state_dict()), f'{str(output_dir)}/model.pt')
-            with open(f'{str(output_dir)}/hyper_params.json', 'w') as f:
-                json.dump(hyper_params, f, indent=4)
-            tokenizer.save(f'{str(output_dir)}/tokenizer_object.json')
-
 if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     cur_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -163,7 +164,10 @@ if __name__ == "__main__":
 
     train_prot_embeds = np.load('./data/fsmol/prot_embeds_fsmol_train.npz')
     valid_prot_embeds = np.load('./data/fsmol/prot_embeds_fsmol_valid.npz')
-    test_prot_embeds = np.load('./data/fsmol/prot_embeds_fsmol_test.npz')
+    with open('prot_emb.pkl', 'rb') as file:
+        test_prot_embeds = pickle.load(file)
+
+    # test_prot_embeds = np.load('./data/fsmol/prot_embeds_fsmol_test.npz')
 
     train_non_chiral_smiles, train_backbones, train_chains, train_assay_ids, train_types, train_labels = read_csv('./data/fsmol/train.csv')
     valid_non_chiral_smiles, valid_backbones, valid_chains, valid_assay_ids, valid_types, valid_labels = read_csv('./data/fsmol/valid.csv')
