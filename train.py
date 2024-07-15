@@ -188,7 +188,7 @@ if __name__ == "__main__":
     test_ds = FSMolDataSet(test_non_chiral_smiles, test_backbones, test_assay_ids, test_types, test_labels,
                             test_prot_embeds, tokenizer, calc_rf=True, use_backbone=hyper_params['mol_backbone'])
 
-    model = InteractionTranslator(prot_encoder=InteractionEncoder(2 + 1024, hyper_params['embedding_dim']),
+    model = InteractionTranslator(prot_encoder=InteractionEncoder(2 + 1280, hyper_params['embedding_dim']),
                                 mol_encoder=TransformerEncoder(len(tokenizer.get_vocab()), embedding_dim=hyper_params['embedding_dim'],
                                                                 hidden_size=hyper_params['embedding_dim'], nhead=hyper_params['encoder_n_head'],
                                                                 n_layers=hyper_params['encoder_n_layer'],
@@ -200,7 +200,7 @@ if __name__ == "__main__":
                                                             max_length=hyper_params['max_mol_len']))
     
     model_path = "./models/2023_05_24_14_46_54/epoch20"
-    model.load_state_dict(torch.load(f'{model_path}/model.pt', map_location=device))
+    # model.load_state_dict(torch.load(f'{model_path}/model.pt', map_location=device))
     model.to(device)
 
     train_loader = DataLoader(train_ds, batch_size=hyper_params['bs'], shuffle=True)
