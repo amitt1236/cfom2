@@ -185,15 +185,16 @@ def main():
                                                             n_layers=hyper_params['decoder_n_layer'],
                                                             max_length=hyper_params['max_mol_len']))
     
-    model_path = "./models/my_model"
+    model_path = "./models/my_embd"
     # model.load_state_dict(torch.load(f'{model_path}/model.pt', map_location=device))
     # tokenizer = load_tokenizer_from_file(f'{model_path}/tokenizer_object.json')
 
     model.to(device)
 
     train_loader = DataLoader(train_ds, batch_size=hyper_params['bs'], shuffle=True)
-    
     training(model, tokenizer, hyper_params, train_loader, test_ds, 20,device)
+
+    # validation_step(model, tokenizer, hyper_params, test_ds, 5, device)
 
 if __name__ == "__main__":
     main()
