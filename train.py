@@ -130,7 +130,7 @@ def main():
         'weight_decay': 0.,
         'epochs': 100,
         'max_mol_len': 128,
-        'embedding_dim': 256,
+        'embedding_dim': 512,
         'arch_type': 'transformer',  # can be 'transformer', 'gru', 'lstm'
         'decoder_n_layer': 2,
         'decoder_n_head': 4,
